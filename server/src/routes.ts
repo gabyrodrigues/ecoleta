@@ -13,5 +13,7 @@ routes.get('/items', itemsController.index);
 
 //cadastro de pontos de coleta
 routes.post('/points', pointsController.create);
+//listagem de ponto específico
+routes.get('/points/:id', pointsController.show);
 
 export default routes;
