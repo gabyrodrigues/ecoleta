@@ -13,6 +13,8 @@ routes.get('/items', itemsController.index);
 
 //cadastro de pontos de coleta
 routes.post('/points', pointsController.create);
+//listagem de pontos filtrados por cidade, estado e itens
+routes.get('/points', pointsController.index);
 //listagem de ponto específico
 routes.get('/points/:id', pointsController.show);
 
