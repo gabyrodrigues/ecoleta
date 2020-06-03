@@ -1,5 +1,5 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 
@@ -33,9 +33,19 @@ const CreatePoint = () => {
 
     const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
 
+    const [formData, setFormData] = useState({
+        name: '',
+        email:'',
+        whatsapp: ''
+    });
+
     const [selectedUf, setSelectedUf] = useState('0');
     const [selectedCity, setSelectedCity] = useState('0');
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
+
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+    const history = useHistory();
 
     useEffect(() => {
         //pegar localização atual do usuário
@@ -92,6 +102,52 @@ const CreatePoint = () => {
         ]);
     }
 
+    function handleInputChange (event: ChangeEvent<HTMLInputElement>) {
+        const { name, value } = event.target;
+
+        setFormData({...formData, [name]: value });
+    }
+
+    function handleSelectItem (id: number) {
+        const alreadySelected = selectedItems.findIndex(item => item === id);
+
+        if (alreadySelected >= 0) { //remove se já tiver sido adicionado
+            //todos os items, menos o que é preciso remover
+            const filteredItems = selectedItems.filter(item => item !== id); //filtra a lista de itens selecionados, pegando apenas aquele que o item for diferente do id a ser removido
+
+            setSelectedItems(filteredItems);
+        } else {
+            setSelectedItems([ ...selectedItems, id]);
+        }
+    }
+
+    async function handleSubmit (event: FormEvent) {
+        event.preventDefault();
+        
+        const { name, email, whatsapp } = formData;
+        const uf = selectedUf;
+        const city = selectedCity;
+        const [latitude, longitude] = selectedPosition;
+        const items = selectedItems;
+
+        const data = {
+            name,
+            email,
+            whatsapp,
+            uf, 
+            city,
+            latitude,
+            longitude,
+            items
+        }
+
+       await api.post('points', data);
+
+       alert('Ponto de coleta criado!');
+
+       history.push('/');
+    }
+
     return (
         <div id="page-create-point">
             <header>
@@ -103,7 +159,7 @@ const CreatePoint = () => {
                 </Link>
             </header>
 
-            <form>
+            <form onSubmit={handleSubmit}>
                 <h1>Cadastro do <br /> ponto de coleta</h1>
                 
                 <fieldset>
@@ -114,6 +170,7 @@ const CreatePoint = () => {
                     <div className="field">
                         <label htmlFor="name">Nome da entidade</label>
                         <input 
+                            onChange={handleInputChange}
                             type="text" 
                             name="name" 
                             id="name"
@@ -124,6 +181,7 @@ const CreatePoint = () => {
                         <div className="field">
                             <label htmlFor="email">Email</label>
                             <input 
+                                onChange={handleInputChange}
                                 type="text" 
                                 name="email" 
                                 id="email"
@@ -132,6 +190,7 @@ const CreatePoint = () => {
                         <div className="field">
                             <label htmlFor="whatsapp">Whatsapp</label>
                             <input 
+                                onChange={handleInputChange}
                                 type="text" 
                                 name="whatsapp" 
                                 id="whatsapp"
@@ -203,7 +262,11 @@ const CreatePoint = () => {
                     <ul className="items-grid">
                         { 
                             items.map(item => (
-                                <li key={item.id} >
+                                <li 
+                                    key={item.id} 
+                                    onClick={() => handleSelectItem(item.id)} 
+                                    className={selectedItems.includes(item.id) ? 'selected' : ''}
+                                >
                                     <img src={item.image_url} alt="Teste"/>
                                     <span>{item.title}</span>
                                 </li>
