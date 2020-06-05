@@ -4,12 +4,12 @@ import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 
 import { Feather as Icon } from '@expo/vector-icons';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
-
+import * as Location from 'expo-location';
+ 
 import api from '../../services/api';
-import axios from 'axios';
 
 interface Item {
     id: number;
@@ -17,11 +17,22 @@ interface Item {
     image_url: string;
 }
 
+interface Point {
+    id: number;
+    name: string;
+    image: string;
+    latitude: number;
+    longitude: number;
+}
+
 const Points = () => {
     const navigation = useNavigation();
 
     const [items, setItems] = useState<Item[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
+    const [points, setPoints] = useState<Point[]>([]);
+
+    const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
 
     useEffect(() => {
         api.get('items').then(response => {
@@ -29,12 +40,49 @@ const Points = () => {
         });
     }, []);
 
+    useEffect(() => {
+        async function loadPosition() {
+            //pedir permissões para acessar a localização do usuário
+            const { status } = await Location.requestPermissionsAsync();
+
+            //se a permissão não foi concedida
+            if(status !== 'granted') {
+                Alert.alert('Oops...', 'Precisamos de sua permissão para obter a localização');
+                return;
+            }
+
+            const location = await Location.getCurrentPositionAsync(); //pega a localização do usuário
+            
+            const { latitude, longitude } = location.coords;
+
+            setInitialPosition([
+                latitude,
+                longitude
+            ]);
+        }
+
+        loadPosition();
+    }, []);
+
+    useEffect(() => {
+        api.get('points', {
+            params: {
+                city: 'Fortaleza',
+                uf: 'CE',
+                items: [1]
+            }
+        }).then(response => {
+            setPoints(response.data);
+            console.log(response.data);
+        });
+    }, []);
+
     function handleNavigateBack () {
         navigation.goBack();
     }
 
-    function handleNavigateToDetail () {
-        navigation.navigate('Detail');
+    function handleNavigateToDetail (id: number) {
+        navigation.navigate('Detail', { point_id: id });
     }
 
     function handleSelectItem (id: number) {
@@ -61,31 +109,43 @@ const Points = () => {
                 <Text style={styles.description}>Encontre no mapa um ponto de coleta.</Text>
 
                 <View style={styles.mapContainer}>
-                    <MapView style={styles.map} initialRegion={{ 
-                        latitude: -3.8396885,
-                        longitude: -38.5183192,
-                        latitudeDelta: 0.014,
-                        longitudeDelta: 0.014
-                    }}>
-                        <Marker 
-                            style={styles.mapMarker}
-                            onPress={handleNavigateToDetail}
-                            coordinate={{
-                                latitude: -3.8396885,
-                                longitude: -38.5183192
-                            }} 
-                        >
-                            <View style={styles.mapMarkerContainer}>
-                                <Image 
-                                    style={styles.mapMarkerImage}  
-                                    source={{ uri: 'https://images.unsplash.com/photo-1531124042451-f3ba1765072c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60' }} 
-                                />
-                                <Text style={styles.mapMarkerTitle}>
-                                    CUCA
-                                </Text>
-                            </View>
-                        </Marker>
-                    </MapView>     
+                    { 
+                        initialPosition[0] !== 0 && (
+                            <MapView 
+                                style={styles.map} 
+                                loadingEnabled={initialPosition[0] === 0}
+                                initialRegion={{ 
+                                    latitude: initialPosition[0],
+                                    longitude: initialPosition[1],
+                                    latitudeDelta: 0.014,
+                                    longitudeDelta: 0.014
+                                }}>
+                                    {
+                                        points.map(point => (
+                                            <Marker 
+                                                key={String(point.id)}
+                                                style={styles.mapMarker}
+                                                onPress={() => handleNavigateToDetail(point.id)}
+                                                coordinate={{
+                                                    latitude: point.latitude,
+                                                    longitude: point.longitude
+                                                }}
+                                            >
+                                                <View style={styles.mapMarkerContainer}>
+                                                    <Image 
+                                                        style={styles.mapMarkerImage}  
+                                                        source={{ uri: point.image }} 
+                                                    />
+                                                    <Text style={styles.mapMarkerTitle}>
+                                                        {point.name}
+                                                    </Text>
+                                                </View>
+                                            </Marker>
+                                        ))
+                                    }
+                                </MapView>     
+                        )
+                    }
                 </View>
             </View>
 
