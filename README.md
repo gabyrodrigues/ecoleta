@@ -1,8 +1,10 @@
 <h3 align="center" >
-  Ecoleta is a marketplace where you can register waste collection points on our web application and also find those points on the mobile version.
+	<img alt="Logo" title="#logo" width="300px" src="web/src/assets/logo.svg/">
+    	<br><br>
+  	Ecoleta is a marketplace where you can register waste collection points on our web application and also find those points on the mobile version.
 </h3>
 <p align="center">
-You can find the layout of the aplication at **[Figma](https://www.figma.com/file/1SxgOMojOB2zYT0Mdk28lB)**
+	You can find the layout of the aplication at <a href="https://www.figma.com/file/1SxgOMojOB2zYT0Mdk28lB" target="_blank">Figma</a>
 </p>
 
 <p align="center">
@@ -26,7 +28,7 @@ You can find the layout of the aplication at **[Figma](https://www.figma.com/fil
 - **CSS**
 - **SQL**
 
-## :books: Running the application
+## :rocket: Running the application
 
 - ### **Prerequisites**
 
@@ -108,7 +110,7 @@ git@github.com:gabyrodrigues/ecoleta.git
 		* **react-native**:  https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz
 		* **react-native-gesture-handler**:  ~1.6.0
 		* **react-native-maps**:  ~0.26.1
-    		* **react-native-reanimated**:  ~1.7.0
+		* **react-native-reanimated**:  ~1.7.0
 		* **react-native-safe-area-contex**:  0.7.3
 		* **react-native-screens**: ~2.2.0
     		* **react-native-svg**:  ~11.0.1
