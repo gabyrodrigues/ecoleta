@@ -22,7 +22,6 @@
 ## :computer: Languages
 
 - **Typescript**
-- **Javascript**
 - **NodeJS**
 - **HTML**
 - **CSS**
