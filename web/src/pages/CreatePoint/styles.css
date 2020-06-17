@@ -40,6 +40,12 @@
 
 #page-create-point form h1 {
     font-size: 36px;
+    margin-bottom: 40px;
+}
+
+#page-create-point form > span {
+    font-size: 14px;
+    margin-top: 15px;
 }
 
 #page-create-point form fieldset {
@@ -223,10 +229,15 @@
     
     #page-create-point form h1 {
         font-size: 28px;
+        margin-bottom: 20px;
     }
 
     #page-create-point form .field-group {
         flex-direction: column;
+    }
+
+    #page-create-point form > span {
+        margin-bottom: 15px;
     }
 
     #page-create-point form .field-group .field+.field {
