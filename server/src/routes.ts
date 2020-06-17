@@ -14,6 +14,8 @@ const upload = multer(multerConfig);
 const pointsController = new PointsController();
 const itemsController = new ItemsController();
 
+const pattern = new RegExp('^[-+]?(?:[0-9]+,)*[0-9]+(?:[0-9]+)?$');
+
 //listagem de items
 routes.get('/items', itemsController.index);
 
@@ -30,7 +32,7 @@ routes.post(
             longitude: Joi.number().required(),
             city: Joi.string().required(),
             uf: Joi.string().required().max(2),
-            items: Joi.string().required()
+            items: Joi.string().required().regex(pattern)
         })
     }, {
         abortEarly: false //exibe todos os erros, em vez de parar logo no primeiro encontrado
