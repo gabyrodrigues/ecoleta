@@ -3,6 +3,7 @@
     background: #E1FAEC;
     border-radius: 10px;
 
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;

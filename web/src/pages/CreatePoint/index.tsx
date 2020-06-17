@@ -13,6 +13,8 @@ import './styles.css';
 
 import logo from '../../assets/logo.svg';
 
+import { toast } from 'react-toastify';
+
 //array ou objeto: informar manualmente o tipo da variável
 interface Item {
     id: number;
@@ -149,11 +151,14 @@ const CreatePoint = () => {
             data.append('image', selectedFile);
         }
 
-       await api.post('points', data);
+       await api.post('points', data).then(response => {
+            console.log(response.config);
+       });
 
-       alert('Ponto de coleta criado!');
+       toast.success(`Ponto de coleta criado com sucesso!`);
 
-       history.push('/');
+        //history.push(`/points/show/${data});
+        history.push(`/`);
     }
 
     return (

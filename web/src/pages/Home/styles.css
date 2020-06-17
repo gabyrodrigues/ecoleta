@@ -1,7 +1,5 @@
 #page-home {
     height: 100vh;
-
-    background: url('../../assets/home-background.svg') no-repeat 700px bottom;
 }
 
 #page-home .content {
@@ -103,5 +101,29 @@
 
     #page-home .content main p {
         font-size: 24px;
+    }
+}
+
+@media(max-width: 768px) {
+    #page-home {
+        background: none;
+    }
+}
+
+@media(min-width: 769px) {
+    #page-home {
+        background: none;
+    }
+}
+
+@media (min-width: 1025px) {
+    #page-home {
+        background: url('../../assets/home-background.svg') no-repeat calc(100% + 20px) bottom;
+    }
+}
+
+@media (min-width: 1440px) {
+    #page-home {
+        background: url('../../assets/home-background.svg') no-repeat 100% bottom;
     }
 }
