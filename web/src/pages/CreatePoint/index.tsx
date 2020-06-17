@@ -151,14 +151,11 @@ const CreatePoint = () => {
             data.append('image', selectedFile);
         }
 
-       await api.post('points', data).then(response => {
-            console.log(response.config);
-       });
+       let point = await api.post('points', data);
 
        toast.success(`Ponto de coleta criado com sucesso!`);
 
-        //history.push(`/points/show/${data});
-        history.push(`/`);
+        history.push(`/points/show/${point.data.id}`);
     }
 
     return (
@@ -189,6 +186,7 @@ const CreatePoint = () => {
                             type="text" 
                             name="name" 
                             id="name"
+                            required
                         />
                     </div>
 
@@ -197,9 +195,10 @@ const CreatePoint = () => {
                             <label htmlFor="email">Email</label>
                             <input 
                                 onChange={handleInputChange}
-                                type="text" 
+                                type="email" 
                                 name="email" 
                                 id="email"
+                                required
                             />
                         </div>
                         <div className="field">
@@ -209,6 +208,7 @@ const CreatePoint = () => {
                                 type="text" 
                                 name="whatsapp" 
                                 id="whatsapp"
+                                required
                             />
                         </div>
                     </div>
@@ -237,7 +237,7 @@ const CreatePoint = () => {
                                 name="uf" 
                                 id="uf"
                                 onChange={handleSelectUf} 
-                                value={selectedUf} 
+                                value={selectedUf}
                             >
                                 <option value="0">Selecione uma UF</option>
                                 {
