@@ -19,7 +19,7 @@
   </a>
 </p>
 
-## Update
+## Updates
 
 1. Now the users who register waste collection points are redirected to a page where they can see their registered informations
 2. On the mobile version, the input for City/UF was changed to a select that get both informations from IBGE's api
