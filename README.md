@@ -19,6 +19,15 @@
   </a>
 </p>
 
+## Update
+
+1. Now the users who register waste collection points are redirected to a page where they can see their registered informations
+2. On the mobile version, the input for City/UF was changed to a select that get both informations from IBGE's api
+3. Now we're using multer file filter to filter specify the allowed file types when uploading a image to waste collection points
+4. The mobile version now has an icon and a splash screen with Ecoleta's logo
+5. It was created a regex on Joi's validation to allow only the required pattern (Only numbers separated by commas, ex.: 1,2)
+6. We're using toast notifications for alerts and messages
+
 ## :computer: Languages
 
 - **Typescript**
