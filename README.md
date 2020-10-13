@@ -127,4 +127,4 @@ git@github.com:gabyrodrigues/ecoleta.git
 		* **typescript**:  ~3.8.3
 
 
-Developed by [Gabriely Rodrigues](https://github.com/gaby-rodrigues)
+Developed by [Gabriely Rodrigues](https://github.com/gabyrodrigues)
